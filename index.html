@@ -897,9 +897,9 @@ function greet(){if(greetP||sessionStorage.getItem('wc_greeted'))return greetP;s
 $('micBtn').onclick=()=>micClick();
 
 // ===== Real sky: location, sidereal time, alt/az, constellations =====
-const D2R=Math.PI/180, ZRH={lat:47.3769,lon:8.5417};
-let geo={lat:ZRH.lat,lon:ZRH.lon,zurich:true,name:null,ok:false};
-const near=(a,b)=>Math.hypot(a.lat-b.lat,(a.lon-b.lon)*Math.cos(a.lat*D2R))<0.35;
+const D2R=Math.PI/180;
+let geo=null, locationFailed=false;
+const retryLocation={zh:'定位不可用 · 重试',en:'Location unavailable · Retry',de:'Standort nicht verfügbar · Erneut versuchen',it:'Posizione non disponibile · Riprova',fr:'Position indisponible · Réessayer',es:'Ubicación no disponible · Reintentar',pt:'Localização indisponível · Tentar novamente',sv:'Plats saknas · Försök igen',fi:'Sijainti ei saatavilla · Yritä uudelleen'};
 function jd(t){return t.getTime()/86400000+2440587.5}
 function lst(t,lon){let g=280.46061837+360.98564736629*(jd(t)-2451545)+lon;return((g%360)+360)%360}
 function altaz(ra,dec,L,lat){const H=(L-ra)*D2R,d=dec*D2R,p=lat*D2R;const sa=Math.sin(d)*Math.sin(p)+Math.cos(d)*Math.cos(p)*Math.cos(H);const alt=Math.asin(sa);
@@ -909,22 +909,27 @@ const conName=(c,l)=>c[3][l]||c[3].la;
 function visibleCons(t){const Ls=lst(t,geo.lon);return CON.map(c=>{const[alt]=altaz(c[2][0],c[2][1],Ls,geo.lat);return{c,alt,score:alt-(c[1]-1)*18}}).filter(o=>o.alt>12).sort((a,b)=>b.score-a.score)}
 const fmtTime=t=>t.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',hour12:false});
 const fmtLL=g=>`${Math.abs(g.lat).toFixed(4)}°${g.lat>=0?'N':'S'}, ${Math.abs(g.lon).toFixed(4)}°${g.lon>=0?'E':'W'}`;
-function placeName(){const U=L[lang].ui;if(geo.zurich)return U.zur;return geo.name||fmtLL(geo)}
-function skySnap(){const t=new Date();return{t,cons:visibleCons(t).slice(0,3).map(o=>o.c[0]),sign:sunSign(t)}}
-function skyLine(s){if(!s)return'';const U=L[lang].ui,byId=id=>CON.find(c=>c[0]===id);let n=s.cons.map(id=>conName(byId(id),lang));
+function skySnap(){if(!geo)return null;const t=new Date();return{t,place:geo.name||fmtLL(geo),cons:visibleCons(t).slice(0,3).map(o=>o.c[0]),sign:sunSign(t)}}
+function skyLine(s){if(!s?.place)return'';const U=L[lang].ui,byId=id=>CON.find(c=>c[0]===id);let n=s.cons.map(id=>conName(byId(id),lang));
  const cons=lang==='zh'?n.join('、'):n.length>1?n.slice(0,-1).join(', ')+U.and+n[n.length-1]:n[0]||'';
- return f(U.sky,{place:placeName(),time:fmtTime(s.t),cons,sign:L[lang].zodA[s.sign]})}
-function renderSkyPanel(){const U=L[lang].ui,t=new Date(),v=visibleCons(t);
- $('skyp').innerHTML=`<b>✦ ${U.skyT}</b><br>📍 ${geo.ok||geo.zurich?placeName():U.loc} · ${fmtLL(geo)}<br>🕗 ${fmtTime(t)} · ☉ ${U.sun}: <b>${L[lang].zodA[sunSign(t)]}</b><br>✧ ${U.visible}: <span class="cl">${v.slice(0,8).map(o=>conName(o.c,lang)).join(' · ')}</span>`}
-async function locate(){
- const done=async(lat,lon)=>{geo={lat,lon,zurich:near({lat,lon},ZRH),name:null,ok:true};
-  if(!geo.zurich){try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=10&lat=${lat}&lon=${lon}&accept-language=${lang}`);const j=await r.json();const a=j.address||{};geo.name=[a.city||a.town||a.village||a.county,a.country].filter(Boolean).join(', ')||null}catch(e){}}
-  projectSky();renderSkyPanel()};
- if(navigator.geolocation)navigator.geolocation.getCurrentPosition(p=>done(p.coords.latitude,p.coords.longitude),()=>done(ZRH.lat,ZRH.lon),{timeout:6000,maximumAge:600000});else done(ZRH.lat,ZRH.lon)}
-// ===== Canvas: stars, constellation figures, meteors with trails =====
-const cv=$('sky'),cx=cv.getContext('2d');let W,H,R,dpr,bg=[],proj={lines:[],stars:[],labels:[]},mets=[],sparks=[];
+ return f(U.sky,{place:s.place,time:fmtTime(s.t),cons,sign:L[lang].zodA[s.sign]})}
+function renderSkyPanel(){const U=L[lang].ui,t=new Date();
+ if(!geo){const panel=$('skyp');panel.textContent='📍 ';if(locationFailed){const button=document.createElement('button');button.textContent=retryLocation[lang]||retryLocation.en;button.onclick=locate;panel.append(button)}else panel.append(U.loc);return}
+ const v=visibleCons(t);
+ $('skyp').innerHTML=`<b>✦ ${U.skyT}</b><br>📍 <span class="geo-label"></span>${fmtLL(geo)}<br>🕗 ${fmtTime(t)} · ☉ ${U.sun}: <b>${L[lang].zodA[sunSign(t)]}</b><br>✧ ${U.visible}: <span class="cl">${v.slice(0,8).map(o=>conName(o.c,lang)).join(' · ')}</span>`;
+ if(geo.name)$('skyp').querySelector('.geo-label').textContent=geo.name+' · '}
+function locate(){
+ locationFailed=false;renderSkyPanel();
+ const fail=()=>{geo=null;locationFailed=true;projectSky();renderSkyPanel()};
+ if(!navigator.geolocation){fail();return}
+ navigator.geolocation.getCurrentPosition(async p=>{
+  const {latitude:lat,longitude:lon}=p.coords;
+  if(!Number.isFinite(lat)||!Number.isFinite(lon)){fail();return}
+  const position={lat,lon,name:null};geo=position;projectSky();renderSkyPanel();
+  try{const r=await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&zoom=10&lat=${lat}&lon=${lon}&accept-language=${lang}`);if(!r.ok)return;const a=(await r.json()).address||{};position.name=[a.city||a.town||a.village||a.municipality||a.county,a.country].filter(Boolean).join(', ');renderSkyPanel()}catch{}
+ },fail,{enableHighAccuracy:true,timeout:15000,maximumAge:0})}
 function toXY(alt,az){const rr=R*Math.tan((90-alt)*D2R/2);return[W/2-rr*Math.sin(az*D2R),H/2-rr*Math.cos(az*D2R)]}
-function projectSky(){const t=new Date(),Ls=lst(t,geo.lon),lines=[],st=new Map(),labels=[];
+function projectSky(){if(!geo){proj={lines:[],stars:[],labels:[]};return}const t=new Date(),Ls=lst(t,geo.lon),lines=[],st=new Map(),labels=[];
  for(const c of CON){for(const seg of c[4]){let prev=null;for(const[ra,dec]of seg){const[a,z]=altaz(ra,dec,Ls,geo.lat);const p=a>-2?toXY(a,z):null;if(p){const k=ra+','+dec;if(!st.has(k))st.set(k,{x:p[0],y:p[1],tw:Math.random()*6.28,r:(1.1+Math.random()*1.1)*dpr})}
    if(prev&&p)lines.push([prev[0],prev[1],p[0],p[1]]);prev=p}}
   const[a,z]=altaz(c[2][0],c[2][1],Ls,geo.lat);if(a>8&&c[1]<=2){const p=toXY(a,z);labels.push([conName(c,lang),p[0],p[1]])}}
