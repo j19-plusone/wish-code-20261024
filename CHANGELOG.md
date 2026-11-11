@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.9.2 — 2026-11-11
+- Official Wish Code logo in the hero: circular asset feathered into the cosmic background, subtle glow pulse (respects prefers-reduced-motion; the text ring does not rotate)
+- Favicon (32×32), apple-touch icon (180×180, taiji and trigram centre) and Open Graph image (1200×630)
+- Visible last-updated timestamp on the page (Europe/Zurich, to the minute)
+
+
 ## v0.9.1 — 2026-10-25
 - Read-aloud fixed for iPhone/iOS Safari: all sentence chunks are queued synchronously inside the tap (setTimeout-chained speak() was dropped by iOS after the first sentence); no cancel() right before speak (iOS WebKit bug); speech engine unlocked with a silent utterance on the first tap; voices reloaded at speak time, fallback to any voice of the language, else system default.
 - Read-aloud button is now a Play/Stop toggle (🔊 / ⏹), localized in 9 languages.

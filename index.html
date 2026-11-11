@@ -5,8 +5,15 @@
 <meta property="og:type" content="website"><meta property="og:site_name" content="Wish Code">
 <meta property="og:title" content="Wish Code · 心愿密码 — Make a wish come true">
 <meta property="og:description" content="Make a wish, spin the stars, and let 3,000 years of I Ching wisdom read it. Free, in 9 languages.">
-<meta property="og:url" content="https://j19-plusone.github.io/wish-code-20261024/">
-<meta name="twitter:card" content="summary"><meta name="twitter:title" content="Wish Code · 心愿密码 — Make a wish come true"><meta name="theme-color" content="#0a0c24">
+<meta property="og:url" content="https://wishcode.ch/">
+<meta property="og:image" content="https://wishcode.ch/assets/og-image_20261111.png">
+<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Wish Code · 心愿密码 — Make a wish come true">
+<meta name="twitter:image" content="https://wishcode.ch/assets/og-image_20261111.png">
+<meta name="theme-color" content="#0a0c24">
+<link rel="canonical" href="https://wishcode.ch/">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
@@ -93,12 +100,22 @@ ul{padding-left:20px}
 </style>
 <style>#bgmBtn{position:fixed;right:14px;bottom:14px;z-index:60;width:38px;height:38px;border-radius:50%;border:1px solid rgba(180,150,255,.45);background:rgba(20,12,50,.55);color:#d9ccff;font-size:16px;cursor:pointer;backdrop-filter:blur(6px);box-shadow:0 0 12px rgba(140,100,255,.35);opacity:.8;transition:opacity .3s}#bgmBtn:hover{opacity:1}#bgmBtn.off{opacity:.45}</style><style id="tianchang-entry-style">
 .tc-entry{position:relative;display:flex;align-items:center;min-height:184px;margin:25px 0 5px;padding:25px 30px;border:1px solid #ceb57a66;border-radius:18px;overflow:hidden;text-align:start;text-decoration:none;color:#f5eacc;background:#19342a;isolation:isolate;box-shadow:0 15px 42px #0003}.tc-entry:before{content:'';position:absolute;inset:-8px;background:url('tianchang/assets/mountain-path.webp') 65% 48%/cover;z-index:-2;animation:tc-landscape 18s ease-in-out infinite alternate;transition:transform 1s}.tc-entry:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#0d292be8,#142b2f9c 43%,#19372a08);z-index:-1}.tc-entry:hover:before{transform:scale(1.12)}.tc-entry:focus-visible{outline:3px solid #e8cb80;outline-offset:5px}.tc-entry-copy{display:block;position:relative}.tc-entry-kicker{display:block;font:9px sans-serif;letter-spacing:3px;color:#c7d4af;margin-bottom:8px}.tc-entry-title{font:33px Georgia,'Songti SC','SimSun',serif;letter-spacing:7px;color:#f0e5be;display:block}.tc-entry-title em{font:9px sans-serif;letter-spacing:2px;display:block;font-style:normal;margin-top:6px;color:#d4dcc2}.tc-entry-desc{font-size:11px;line-height:1.6;display:block;color:#c9dbc6;margin-top:12px;max-width:340px}.tc-entry-arrow{margin-left:auto;border:1px solid #e9e3bf77;color:#f2e7bd;border-radius:50%;height:44px;width:44px;display:grid;place-items:center;flex:none;font-size:22px;background:#163b2c55;backdrop-filter:blur(5px)}.tc-entry-free{font-size:9px;letter-spacing:1px;color:#eee6c2;position:absolute;bottom:14px;right:18px}.tc-cloud{position:absolute;bottom:5px;right:-8%;width:75%;height:30%;filter:blur(13px);background:linear-gradient(0deg,transparent,#e9f0d955,transparent);animation:tc-cloud 13s ease-in-out infinite alternate;pointer-events:none}@keyframes tc-landscape{to{background-position:69% 43%;transform:scale(1.05)}}@keyframes tc-cloud{to{transform:translateX(-22%)}}@media(max-width:550px){.tc-entry{padding:24px;min-height:185px;margin-top:20px}.tc-entry-title{font-size:29px}.tc-entry-desc{max-width:220px;font-size:10px}.tc-entry-arrow{height:35px;width:35px}.tc-entry-free{font-size:8px;bottom:10px;right:13px}.tc-entry-kicker{font-size:8px;letter-spacing:2px}}@media(prefers-reduced-motion:reduce){.tc-entry:before,.tc-cloud{animation:none;transition:none}}
-</style></head><body>
+</style>
+<style id="logo-hero">
+.logo-hero{margin:16px auto 0;width:clamp(140px,42vw,220px);height:auto;line-height:0;filter:drop-shadow(0 0 16px rgba(255,215,122,.28));animation:logoGlow 5.5s ease-in-out infinite}
+.logo-hero img{width:100%;height:auto;display:block;border-radius:50%;background:transparent;user-select:none;pointer-events:none;-webkit-user-drag:none}
+@keyframes logoGlow{0%,100%{filter:drop-shadow(0 0 12px rgba(255,215,122,.22)) drop-shadow(0 0 26px rgba(122,139,255,.18))}50%{filter:drop-shadow(0 0 22px rgba(255,215,122,.48)) drop-shadow(0 0 36px rgba(180,140,255,.32))}}
+@media (prefers-reduced-motion:reduce){.logo-hero{animation:none;filter:drop-shadow(0 0 16px rgba(255,215,122,.3))}}
+#home h1{margin-top:12px}
+.updated{margin-top:10px;font-size:11px;color:#6e76b8;letter-spacing:.03em}
+</style>
+</head><body>
 <canvas id="sky"></canvas>
 <div class="wrap">
  <div class="top"><span class="brand">✦ Wish Code · <span id="brandSub">心愿密码</span></span><select id="langSel" aria-label="Language"></select></div>
 <a class="tc-entry" href="./tianchang/?enter=1" id="tianchangEntry" aria-label="天长观 · 免费入观"><span class="tc-cloud" aria-hidden="true"></span><span class="tc-entry-copy"><span class="tc-entry-kicker" id="tcKicker">WISH CODE · A NEW WORLD</span><strong class="tc-entry-title">天长观<em>TIANCHANG TEMPLE</em></strong><span class="tc-entry-desc" id="tcDesc">循山而上，山门为你而开。静坐、诵经，让心愿在此生长。</span></span><span class="tc-entry-arrow" aria-hidden="true">↗</span><span class="tc-entry-free" id="tcFree">免费入观 · 自愿随喜</span></a>
  <section id="home">
+  <div class="logo-hero"><img src="assets/wishcode_logo_20261111.webp" width="220" height="220" alt="Wish Code"></div>
   <h1>Make a Wish</h1>
   <div class="sub" data-i="sub"></div>
   <div class="wish"><input id="wishIn"><button class="mic" id="micBtn"><i class="star"></i><span class="fairy" id="fairy" aria-hidden="true">🧚‍♀️</span></button></div>
@@ -114,6 +131,7 @@ ul{padding-left:20px}
  </section>
  <section id="result"></section>
  <div class="disc" data-i="disc"></div>
+  <div class="updated" id="updated">Updated 2026-11-11 15:25 Europe/Zurich</div>
 </div>
 <script src="./language.js?v=1"></script><script>
 // IAU 88 constellations: names + line figures (RA/Dec deg, J2000). Source: d3-celestial by Olaf Frohn (BSD-3), github.com/ofrohn/d3-celestial

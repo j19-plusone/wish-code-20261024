@@ -1,8 +1,8 @@
 # Wish Code · 心愿密码 — Make a wish come true
 
-Live: https://j19-plusone.github.io/wish-code-20261024/
+Live: https://wishcode.ch/
 
-Entertainment AI-divination web app for the Zurich Hackathon (27–28 Nov 2026). Date: 2026-10-24 (v0.7). Formerly "Miracle Code / 奇迹代码".
+Entertainment AI-divination web app for the Zurich Hackathon (27–28 Nov 2026). Date: 2026-11-11 (v0.9.2). Formerly "Miracle Code / 奇迹代码".
 
 Silently make a wish, spin three 1–99 slot reels, and get a Meihua Yishu (梅花易数) I Ching reading (primary / process / outcome hexagrams, five-element Body/Use) with a 0–100 fortune score, strengths, weaknesses and advice — framed by the real night sky above you (IAU 88 constellations computed for your location and time).
 
